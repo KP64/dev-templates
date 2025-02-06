@@ -1,0 +1,43 @@
+name: Rust CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions: {}
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+      RUSTC_WRAPPER: "sccache"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@85e6279cec87321a52edac9c87bce653a07cf6c2
+        with:
+          persist-credentials: false
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@c5a29ddb4d9d194e7c84ec8c3fba61b1c31fee8c
+        with:
+          toolchain: 1.84.1
+
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@bee06ee9630d445e19c1f7098fc65b87de3fefc4
+        with:
+          tool: cargo-nextest
+
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@054db53350805f83040bf3e6e9b8cf5a139aa7c9
+
+      - name: Run Clippy
+        run: cargo clippy --all-targets -- -W clippy::pedantic -D warnings
+
+      - name: Check formatting
+        run: cargo fmt --all --check
+
+      - name: Run Tests
+        run: cargo nextest run

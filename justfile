@@ -14,5 +14,4 @@ links:
 
 # Check Github Actions
 actions:
-    @nix shell nixpkgs#zizmor --command zizmor -p .github/workflows/
-
+    @- nix shell nixpkgs#zizmor --command zizmor -p ./**/.github/workflows/
