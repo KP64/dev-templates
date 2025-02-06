@@ -8,9 +8,6 @@
     # just
     just.enable = true;
 
-    # markdown
-    mdformat.enable = true;
-
     # shell
     shfmt.enable = true;
 
