@@ -26,6 +26,8 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
     ]);
 
+  useFetchCargoVendor = true;
+
   useNextest = true;
   # Remove this line when application has >= 1 tests.
   doCheck = false;

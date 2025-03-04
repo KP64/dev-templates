@@ -75,7 +75,6 @@
               cargo-tarpaulin
 
               # License 📜
-              licensor
               cargo-deny
 
               # supply chain ⛓️
@@ -96,7 +95,7 @@
               cargo-geiger
 
               # Inner workings ⚙️
-              cargo-asm
+              cargo-show-asm
               cargo-expand
 
               # misc ❔
