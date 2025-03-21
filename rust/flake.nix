@@ -47,8 +47,9 @@
                 strict = true;
               };
 
-              shfmt.enable = true;
+              prettier.enable = true;
 
+              shfmt.enable = true;
 
               rustfmt.enable = true;
               leptosfmt.enable = true;
