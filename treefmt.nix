@@ -8,7 +8,10 @@
     # nix
     deadnix.enable = true;
     statix.enable = true;
-    nixfmt.enable = true;
+    nixfmt = {
+      enable = true;
+      strict = true;
+    };
 
     # just
     just.enable = true;
