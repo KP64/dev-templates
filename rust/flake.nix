@@ -49,7 +49,6 @@
 
               shfmt.enable = true;
 
-              just.enable = true;
 
               rustfmt.enable = true;
               leptosfmt.enable = true;
