@@ -103,7 +103,7 @@
               cargo-release
             ];
 
-            buildInputs = with pkgs; [ (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) ];
+            buildInputs = [ (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) ];
           };
         };
     };
