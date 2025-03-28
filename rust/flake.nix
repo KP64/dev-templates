@@ -63,7 +63,7 @@
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
               # Nix lsp ❄️
-              nixd
+              nil
 
               # For the extra reinforcement 😂
               cargo-mommy
