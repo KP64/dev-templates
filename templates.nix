@@ -1,4 +1,9 @@
 {
+  nix = {
+    path = ./nix;
+    description = "Fully featured nix development flake";
+  };
+
   rust = {
     path = ./rust;
     description = "Fully featured rust development flake";
