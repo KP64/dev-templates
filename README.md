@@ -15,3 +15,4 @@ Fully fledged dev templates for various languages utilizing the Nix ❄️ langu
 ## Supported languages
 
 - 🦀 [Rust](./rust)
+- ❄️ [Nix](./nix)
