@@ -61,6 +61,8 @@
           packages.default = pkgs.callPackage ./package.nix { };
 
           devShells.default = pkgs.mkShell {
+            nativeBuildInputs = [ (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) ];
+
             packages = with pkgs; [
               # Nix lsp ❄️
               nil
@@ -82,6 +84,7 @@
 
               # supply chain ⛓️
               cargo-vet
+              cargo-audit
               cargo-auditable
               cargo-crev
 
@@ -104,9 +107,8 @@
               # misc ❔
               cargo-msrv
               cargo-release
+              typos
             ];
-
-            nativeBuildInputs = [ (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) ];
           };
         };
     };
