@@ -31,6 +31,14 @@
 
       perSystem =
         { pkgs, system, ... }:
+        let
+          buildInputs = [ pkgs.openssl ];
+
+          nativeBuildInputs = with pkgs; [
+            (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
+            pkg-config
+          ];
+        in
         {
           _module.args.pkgs = import inputs.nixpkgs {
             inherit system;
@@ -58,10 +66,13 @@
             };
           };
 
-          packages.default = pkgs.callPackage ./package.nix { };
+          packages.default = pkgs.callPackage ./package.nix {
+            inherit buildInputs nativeBuildInputs;
+            inherit (inputs) self;
+          };
 
           devShells.default = pkgs.mkShell {
-            nativeBuildInputs = [ (pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml) ];
+            inherit buildInputs nativeBuildInputs;
 
             packages = with pkgs; [
               # Nix lsp ❄️

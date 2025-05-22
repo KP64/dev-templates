@@ -1,28 +1,23 @@
 {
+  self,
   lib,
   rustPlatform,
-  stdenv,
-  darwin,
-  pkg-config,
-  openssl,
+  buildInputs,
+  nativeBuildInputs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "";
   version = "";
 
-  src = ./.;
+  src = self;
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     allowBuiltinFetchGit = true;
   };
 
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [
-    openssl
-  ] ++ (lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]);
+  inherit buildInputs nativeBuildInputs;
 
   useNextest = true;
 
