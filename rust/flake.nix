@@ -91,6 +91,7 @@
               cargo-tarpaulin
 
               # License 📜
+              cargo-license
               cargo-deny
 
               # supply chain ⛓️
@@ -100,6 +101,7 @@
               cargo-crev
 
               # Dependencies 📦
+              cargo-edit
               cargo-udeps
               cargo-machete
 
