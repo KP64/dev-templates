@@ -78,11 +78,32 @@
               # Nix lsp ❄️
               nil
 
-              # For the extra reinforcement 😂
+              # Dependencies 📦
+              cargo-edit
+              cargo-udeps
+              cargo-machete
+
+              # Extra reinforcement 😂
               cargo-mommy
 
-              # file watcher 👀
+              # File watcher 👀
               bacon
+
+              # Inner workings ⚙️
+              cargo-show-asm
+              cargo-expand
+
+              # Release 🎉
+              cargo-release
+              cargo-semver-checks
+
+              # License 📜
+              cargo-license
+              cargo-deny
+
+              # Misc ❔
+              cargo-msrv
+              typos
 
               # Next gen testing 🧪
               cargo-nextest
@@ -90,20 +111,11 @@
               cargo-mutants
               cargo-tarpaulin
 
-              # License 📜
-              cargo-license
-              cargo-deny
-
-              # supply chain ⛓️
+              # Supply chain ⛓️
               cargo-vet
               cargo-audit
               cargo-auditable
               cargo-crev
-
-              # Dependencies 📦
-              cargo-edit
-              cargo-udeps
-              cargo-machete
 
               # Tasks 🛠️
               cargo-make
@@ -112,15 +124,6 @@
 
               # Unsafe ☢️
               cargo-geiger
-
-              # Inner workings ⚙️
-              cargo-show-asm
-              cargo-expand
-
-              # misc ❔
-              cargo-msrv
-              cargo-release
-              typos
             ];
           };
         };
