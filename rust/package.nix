@@ -5,7 +5,7 @@
   buildInputs,
   nativeBuildInputs,
 }:
-
+# TODO: Add metadata
 rustPlatform.buildRustPackage rec {
   pname = "";
   version = "";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = self;
 
   cargoLock = {
-    lockFile = ./Cargo.lock;
+    lockFile = "${self}/Cargo.lock";
     allowBuiltinFetchGit = true;
   };
 

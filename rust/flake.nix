@@ -35,8 +35,9 @@
           buildInputs = [ pkgs.openssl ];
 
           nativeBuildInputs = with pkgs; [
-            (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
+            mold
             pkg-config
+            (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
           ];
         in
         {
