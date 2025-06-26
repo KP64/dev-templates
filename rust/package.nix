@@ -2,8 +2,10 @@
   self,
   lib,
   rustPlatform,
-  buildInputs,
-  nativeBuildInputs,
+  mold,
+  openssl,
+  pkg-config,
+  rust-bin,
 }:
 # TODO: Add metadata
 rustPlatform.buildRustPackage rec {
@@ -17,7 +19,13 @@ rustPlatform.buildRustPackage rec {
     allowBuiltinFetchGit = true;
   };
 
-  inherit buildInputs nativeBuildInputs;
+  buildInputs = [ openssl ];
+
+  nativeBuildInputs = [
+    mold
+    pkg-config
+    (rust-bin.fromRustupToolchainFile "${self}/rust-toolchain.toml")
+  ];
 
   useNextest = true;
 
