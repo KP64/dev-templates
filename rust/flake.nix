@@ -42,30 +42,25 @@
             overlays = [ (import inputs.rust-overlay) ];
           };
 
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              deadnix.enable = true;
-              statix.enable = true;
-              nixfmt = {
-                enable = true;
-                strict = true;
-              };
-
-              prettier.enable = true;
-
-              shfmt.enable = true;
-
-              rustfmt.enable = true;
-              leptosfmt.enable = true;
-
-              taplo.enable = true;
+          treefmt.programs = {
+            deadnix.enable = true;
+            statix.enable = true;
+            nixfmt = {
+              enable = true;
+              strict = true;
             };
+
+            prettier.enable = true;
+
+            shfmt.enable = true;
+
+            rustfmt.enable = true;
+            leptosfmt.enable = true;
+
+            taplo.enable = true;
           };
 
-          packages.default = pkgs.callPackage ./package.nix {
-            inherit (inputs) self;
-          };
+          packages.default = pkgs.callPackage ./package.nix { inherit (inputs) self; };
 
           devShells.default = pkgs.mkShell {
             inputsFrom = [ self'.packages.default ];
