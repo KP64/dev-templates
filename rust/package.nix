@@ -1,42 +1,45 @@
 {
   self,
   lib,
-  rustPlatform,
+  makeRustPlatform,
   mold,
-  openssl,
   pkg-config,
   rust-bin,
 }:
-# TODO: Add metadata
-rustPlatform.buildRustPackage rec {
-  pname = "";
-  version = "";
+let
+  rustToolchain = rust-bin.fromRustupToolchainFile "${self}/rust-toolchain.toml";
+  manifest = (lib.importTOML "${self}/Cargo.toml").package;
+in
+(makeRustPlatform rec {
+  rustc = rustToolchain;
+  cargo = rustc;
+}).buildRustPackage
+  rec {
+    pname = manifest.name;
+    inherit (manifest) version;
 
-  src = self;
+    src = self;
 
-  cargoLock = {
-    lockFile = "${self}/Cargo.lock";
-    allowBuiltinFetchGit = true;
-  };
+    cargoLock = {
+      lockFile = "${self}/Cargo.lock";
+      allowBuiltinFetchGit = true;
+    };
 
-  buildInputs = [ openssl ];
+    nativeBuildInputs = [
+      mold
+      pkg-config
+    ];
 
-  nativeBuildInputs = [
-    mold
-    pkg-config
-    (rust-bin.fromRustupToolchainFile "${self}/rust-toolchain.toml")
-  ];
+    useNextest = true;
 
-  useNextest = true;
+    # TODO: Remove this line when application has >= 1 tests.
+    doCheck = false;
 
-  # Remove this line when application has >= 1 tests.
-  doCheck = false;
-
-  meta = {
-    description = "";
-    homepage = "";
-    license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ ];
-    mainProgram = pname;
-  };
-}
+    meta = {
+      description = "";
+      homepage = "";
+      license = lib.licenses.unlicense;
+      maintainers = with lib.maintainers; [ ];
+      mainProgram = pname;
+    };
+  }
