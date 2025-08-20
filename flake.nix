@@ -33,7 +33,7 @@
 
           devShells.default = pkgs.mkShell {
             packages = with pkgs; [
-              nixd
+              nil
               just
             ];
           };
