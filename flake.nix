@@ -32,6 +32,8 @@
           treefmt = ./treefmt.nix;
 
           devShells.default = pkgs.mkShell {
+            name = "templates";
+
             packages = with pkgs; [
               nil
               just

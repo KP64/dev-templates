@@ -42,6 +42,8 @@
           };
 
           devShells.default = pkgs.mkShell {
+            name = "template"; # TODO: Change name
+
             packages = with pkgs; [
               # Nix lsp ❄️
               nil
