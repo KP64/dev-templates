@@ -8,6 +8,7 @@
       treefmt.programs = {
         deadnix.enable = true;
         statix.enable = true;
+        nixf-diagnose.enable = true;
         nixfmt = {
           enable = true;
           strict = true;
@@ -15,15 +16,16 @@
 
         prettier.enable = true;
 
+        shellcheck.enable = true;
         shfmt.enable = true;
 
         rustfmt.enable = true;
-        leptosfmt.enable = true;
-
         taplo.enable = true;
       };
 
       devShells.default = pkgs.mkShell {
+        name = "template"; # TODO: Change name
+
         inputsFrom = [ self'.packages.default ];
 
         packages = with pkgs; [
