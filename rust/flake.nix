@@ -17,8 +17,6 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      debug = true;
-
       systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
       imports = [ flake-parts.flakeModules.partitions ];
@@ -30,8 +28,8 @@
       };
 
       partitions.dev = {
-        extraInputsFlake = ./nix/dev;
-        module.imports = [ ./nix/dev ];
+        extraInputsFlake = ./dev;
+        module.imports = [ ./dev ];
       };
       perSystem =
         {
@@ -42,12 +40,7 @@
           ...
         }:
         let
-          toolchain = inputs'.fenix.packages.fromToolchainFile {
-            file = ./rust-toolchain.toml;
-            sha256 = lib.fakeSha256; # TODO: Add Sha
-          };
-
-          craneLib = (inputs.crane.mkLib pkgs).overrideToolchain (_: toolchain);
+          craneLib = (inputs.crane.mkLib pkgs).overrideToolchain inputs'.fenix.packages.stable.toolchain;
 
           commonArgs = {
             src = craneLib.cleanCargoSource ./.;
@@ -57,22 +50,28 @@
 
           cargoArtifacts = craneLib.buildDepsOnly commonArgs;
           # TODO: Change Placeholders to actual names.
-          Placeholder = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
+          placeholder = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
         in
         {
-          packages.default = Placeholder;
+          packages.default = placeholder;
 
           checks = self'.packages // {
-            PlaceholderClippy = craneLib.cargoClippy (
+            placeholderClippy = craneLib.cargoClippy (
               commonArgs
               // {
                 inherit cargoArtifacts;
                 cargoClippyExtraArgs = "--all-targets";
               }
             );
-            PlaceholderDoc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
-            PlaceholderDeny = craneLib.cargoDeny { inherit (commonArgs) src; };
-            PlaceholderNextest = craneLib.cargoNextest (commonArgs // { inherit cargoArtifacts; });
+            placeholderDoc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
+            placeholderDeny = craneLib.cargoDeny { inherit (commonArgs) src; };
+            placeholderNextest = craneLib.cargoNextest (
+              commonArgs
+              // {
+                inherit cargoArtifacts;
+                cargoExtraArgs = "--no-tests warn"; # TODO: remove when tests are implemented
+              }
+            );
           };
         };
     };

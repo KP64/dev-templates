@@ -1,36 +1,18 @@
-{ inputs, ... }:
 {
-  imports = [ inputs.treefmt-nix.flakeModule ];
-
   perSystem =
     { self', pkgs, ... }:
     {
-      treefmt.programs = {
-        deadnix.enable = true;
-        statix.enable = true;
-        nixf-diagnose.enable = true;
-        nixfmt = {
-          enable = true;
-          strict = true;
-        };
-
-        prettier.enable = true;
-
-        shellcheck.enable = true;
-        shfmt.enable = true;
-
-        rustfmt.enable = true;
-        taplo.enable = true;
-      };
-
       devShells.default = pkgs.mkShell {
         name = "template"; # TODO: Change name
 
-        inputsFrom = [ self'.packages.default ];
+        inputsFrom = builtins.attrValues self'.packages;
 
         packages = with pkgs; [
           # Nix lsp ❄️
           nil
+
+          # Debugging 🦀
+          lldb
 
           # Dependencies 📦
           cargo-edit
@@ -57,6 +39,7 @@
 
           # Misc ❔
           cargo-msrv
+          cargo-sort
           typos
 
           # Next gen testing 🧪
