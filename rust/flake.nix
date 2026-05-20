@@ -72,9 +72,9 @@
                 cargoClippyExtraArgs = "--all-targets";
               }
             );
-            Deny = craneLib.cargoDeny { inherit (commonArgs) src; };
-            Doc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
-            Nextest = craneLib.cargoNextest (
+            deny = craneLib.cargoDeny { inherit (commonArgs) src; };
+            doc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
+            nextest = craneLib.cargoNextest (
               commonArgs
               // {
                 inherit cargoArtifacts;
