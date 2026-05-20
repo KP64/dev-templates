@@ -61,7 +61,7 @@
           packages.default = placeholder;
 
           checks = config.packages // {
-            audit = craneLib.acargoAudit {
+            audit = craneLib.cargoAudit {
               inherit (commonArgs) src;
               inherit (inputs) advisory-db;
             };
