@@ -1,11 +1,11 @@
 {
   perSystem =
-    { self', pkgs, ... }:
+    { config, pkgs, ... }:
     {
       devShells.default = pkgs.mkShell {
         name = "template"; # TODO: Change name
 
-        inputsFrom = builtins.attrValues self'.packages;
+        inputsFrom = builtins.attrValues config.packages;
 
         packages = with pkgs; [
           # Nix lsp ❄️

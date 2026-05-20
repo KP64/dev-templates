@@ -4,6 +4,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
+    advisory-db = {
+      url = "github:rustsec/advisory-db";
+      flake = false;
+    };
+
     crane.url = "github:ipetkov/crane";
 
     fenix = {
@@ -33,7 +38,7 @@
       };
       perSystem =
         {
-          self',
+          config,
           inputs',
           lib,
           pkgs,
@@ -49,29 +54,34 @@
           };
 
           cargoArtifacts = craneLib.buildDepsOnly commonArgs;
-          # TODO: Change Placeholders to actual names.
+          # TODO: Change Placeholders to the project name.
           placeholder = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
         in
         {
           packages.default = placeholder;
 
-          checks = self'.packages // {
-            placeholderClippy = craneLib.cargoClippy (
+          checks = config.packages // {
+            audit = craneLib.acargoAudit {
+              inherit (commonArgs) src;
+              inherit (inputs) advisory-db;
+            };
+            clippy = craneLib.cargoClippy (
               commonArgs
               // {
                 inherit cargoArtifacts;
                 cargoClippyExtraArgs = "--all-targets";
               }
             );
-            placeholderDoc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
-            placeholderDeny = craneLib.cargoDeny { inherit (commonArgs) src; };
-            placeholderNextest = craneLib.cargoNextest (
+            Deny = craneLib.cargoDeny { inherit (commonArgs) src; };
+            Doc = craneLib.cargoDoc (commonArgs // { inherit cargoArtifacts; });
+            Nextest = craneLib.cargoNextest (
               commonArgs
               // {
                 inherit cargoArtifacts;
                 cargoExtraArgs = "--no-tests warn"; # TODO: remove when tests are implemented
               }
             );
+            tarpaulin = craneLib.cargoTarpaulin (commonArgs // { inherit cargoArtifacts; });
           };
         };
     };
