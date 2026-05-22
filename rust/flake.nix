@@ -2,7 +2,7 @@
   description = "Fully featured flake ❄️ for rusty 🦀 development";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     advisory-db = {
       url = "github:rustsec/advisory-db";
@@ -36,6 +36,7 @@
         extraInputsFlake = ./dev;
         module.imports = [ ./dev ];
       };
+
       perSystem =
         {
           config,
