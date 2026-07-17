@@ -15,49 +15,39 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
       imports = [ inputs.treefmt-nix.flakeModule ];
 
-      perSystem =
-        { pkgs, ... }:
-        {
-          treefmt = {
-            projectRootFile = "flake.nix";
-            programs = {
-              deadnix.enable = true;
-              statix.enable = true;
-              nixfmt = {
-                enable = true;
-                strict = true;
-              };
-
-              shfmt.enable = true;
-            };
+      perSystem = { pkgs, ... }: {
+        treefmt.programs = {
+          deadnix.enable = true;
+          statix.enable = true;
+          nixfmt = {
+            enable = true;
+            strict = true;
           };
 
-          devShells.default = pkgs.mkShell {
-            name = "template"; # TODO: Change name
-
-            packages = with pkgs; [
-              # Nix lsp ❄️
-              nil
-
-              # Check inputs & vulnerabilites
-              nix-melt
-              vulnix
-
-              # Nixpkgs devtools
-              nix-init
-              nixpkgs-lint-community
-              nixpkgs-review
-            ];
-          };
+          shfmt.enable = true;
         };
+
+        devShells.default = pkgs.mkShell {
+          name = "template"; # TODO: Change name
+
+          packages = with pkgs; [
+            # Nix lsp ❄️
+            nil
+
+            # Check inputs & vulnerabilities
+            nix-melt
+            vulnix
+
+            # Nixpkgs devtools
+            nix-init
+            nixpkgs-lint-community
+            nixpkgs-review
+          ];
+        };
+      };
     };
 }

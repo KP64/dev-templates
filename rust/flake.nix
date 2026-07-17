@@ -20,17 +20,13 @@
   };
 
   outputs =
-    inputs@{ flake-parts, ... }:
+    inputs@{ flake-parts, nixpkgs, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = inputs.nixpkgs.lib.systems.flakeExposed;
+      systems = nixpkgs.lib.systems.flakeExposed;
 
       imports = [ flake-parts.flakeModules.partitions ];
 
-      partitionedAttrs = {
-        checks = "dev";
-        devShells = "dev";
-        formatter = "dev";
-      };
+      partitionedAttrs = nixpkgs.lib.genAttrs [ "checks" "devShells" "formatter" ] (_: "dev");
 
       partitions.dev = {
         extraInputsFlake = ./dev;
@@ -40,26 +36,30 @@
       perSystem =
         {
           config,
+          self',
           inputs',
           lib,
           pkgs,
           ...
         }:
         let
-          craneLib = (inputs.crane.mkLib pkgs).overrideToolchain inputs'.fenix.packages.stable.toolchain;
+          craneLib = lib.pipe pkgs [
+            inputs.crane.mkLib
+            (clib: clib.overrideScope (_: _: { stdenvSelector = _: self'.devShells.default.stdenv; }))
+            (clib: clib.overrideToolchain inputs'.fenix.packages.stable.toolchain)
+          ];
 
           commonArgs = {
             src = craneLib.cleanCargoSource ./.;
             strictDeps = true;
-            nativeBuildInputs = lib.optional pkgs.stdenv.isLinux pkgs.mold;
           };
 
           cargoArtifacts = craneLib.buildDepsOnly commonArgs;
           # TODO: Change Placeholders to the project name.
-          placeholder = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
+          namePlaceholder = craneLib.buildPackage (commonArgs // { inherit cargoArtifacts; });
         in
         {
-          packages.default = placeholder;
+          packages.default = namePlaceholder;
 
           checks = config.packages // {
             audit = craneLib.cargoAudit {

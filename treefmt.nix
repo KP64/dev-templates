@@ -1,9 +1,4 @@
 {
-  settings.global.excludes = [
-    "UNLICENSE"
-    "*.gitignore"
-  ];
-
   programs = {
     # nix
     deadnix.enable = true;

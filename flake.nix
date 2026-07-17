@@ -15,30 +15,20 @@
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [
-        "aarch64-darwin"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "x86_64-linux"
-      ];
+      systems = inputs.nixpkgs.lib.systems.flakeExposed;
 
       flake.templates = import ./templates.nix;
 
       imports = [ inputs.treefmt-nix.flakeModule ];
 
-      perSystem =
-        { pkgs, ... }:
-        {
-          treefmt = ./treefmt.nix;
+      perSystem = { pkgs, ... }: {
+        treefmt = ./treefmt.nix;
 
-          devShells.default = pkgs.mkShell {
-            name = "templates";
+        devShells.default = pkgs.mkShell {
+          name = "templates";
 
-            packages = with pkgs; [
-              nil
-              just
-            ];
-          };
+          packages = [ pkgs.nil ];
         };
+      };
     };
 }
